@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="theme-color" content="#111827">
+    <meta name="theme-color" content="#000000">
     <meta name="robots" content="index, follow">
     <meta name="keywords" content="API endpoints, RESTful API category, developer documentation, dark theme API tools">
     <meta property="og:title" content="Category - ">
@@ -40,7 +40,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #111827;
+            background: #000000;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -55,8 +55,8 @@
         .spinner {
             width: 40px;
             height: 40px;
-            border: 4px solid #374151;
-            border-top: 4px solid #3b82f6;
+            border: 4px solid #4b5563;
+            border-top: 4px solid #9333ea;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -106,7 +106,7 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-200 antialiased font-mono min-h-screen">
+<body class="bg-black text-gray-200 antialiased font-mono min-h-screen">
     <!-- Loader -->
     <div id="loader">
         <div class="spinner"></div>
@@ -114,8 +114,8 @@
     </div>
 
     <!-- Sidebar -->
-    <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-gray-900 z-[60] transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto shadow-2xl">
-        <div class="py-4 px-4 flex justify-between items-center border-b border-gray-800">
+    <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-black z-[60] transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto shadow-2xl border-r border-gray-700">
+        <div class="py-4 px-4 flex justify-between items-center border-b border-gray-700">
             <h3 class="text-lg font-semibold text-gray-100">API Categories</h3>
             <button onclick="closeSidebar()" class="text-gray-400 hover:text-gray-100">
                 <i class="fas fa-times text-xl"></i>
@@ -128,15 +128,15 @@
     <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-[50]" onclick="closeSidebar()"></div>
 
     <!-- Notification Panel -->
-    <div id="notificationPanel" class="hidden fixed top-12 right-4 bg-gray-800 border border-gray-700 p-4 z-[60] shadow-xl rounded-lg w-80 max-h-96 overflow-y-auto transition-all">
+    <div id="notificationPanel" class="hidden fixed top-12 right-4 bg-black border border-gray-700 p-4 z-[60] shadow-xl rounded-lg w-80 max-h-96 overflow-y-auto transition-all">
         <div class="flex justify-between items-center mb-3">
             <h4 class="text-sm font-bold text-gray-100">Notifications</h4>
-            <button id="clearNotifications" class="text-blue-400 text-xs hover:text-blue-300">Clear All</button>
+            <button id="clearNotifications" class="text-purple-400 text-xs hover:text-purple-300">Clear All</button>
         </div>
         <div id="notifContent" class="space-y-3"></div>
     </div>
 
-    <header class="sticky top-0 z-50 bg-gray-900 border-b border-gray-700 py-4 shadow-md">
+    <header class="sticky top-0 z-50 bg-black border-b border-gray-700 py-4 shadow-md">
         <div class="max-w-2xl mx-auto flex justify-between items-center px-4">
             <button onclick="toggleSidebar()" class="pl-2 transition-all hover:scale-110">
                 <i class="fas fa-bars text-gray-100 text-xl"></i>
@@ -150,7 +150,7 @@
     </header>
 
     <main class="max-w-2xl mx-auto px-8 py-6">
-        <div class="text-left mb-6">
+        <div class="text-left mb-3">
         </div>
 
         <div class="flex items-center justify-between mb-2">
@@ -162,7 +162,7 @@
                     type="text" 
                     id="searchInput" 
                     placeholder="Search endpoints..." 
-                    class="w-full pl-12 pr-5 py-4 text-sm border border-gray-700 bg-gray-800 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-blue-500 rounded-lg shadow-sm transition-all focus:shadow-md"
+                    class="w-full pl-12 pr-5 py-4 text-sm border border-gray-700 bg-black text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-500 rounded-lg shadow-sm transition-all focus:shadow-md"
                 >
             </div>
         </div>
@@ -424,14 +424,23 @@
 
                     responseContent.innerHTML = headerHtml + `<pre class="text-white">${escapedJsonString}</pre>`;
                     copyResponseButton.classList.remove('hidden');
+                    copyResponseButton.onclick = () => copyToClipboard('response-content-${endpointIndex}');
+                    copyResponseButton.innerHTML = '<span class="material-icons text-sm">content_copy</span>';
                 } else if (responseContentType.includes('image/')) {
                     axiosConfig.responseType = 'blob';
                     const blobResponse = await axios(axiosConfig);
                     const imageUrl = URL.createObjectURL(blobResponse.data);
                     responseContent.innerHTML = headerHtml + `
-                        <img src="${imageUrl}" alt="Response Image" class="max-w-full h-auto">
+                        <img src="${imageUrl}" alt="Response Image" class="max-w-full h-auto rounded">
                     `;
-                    copyResponseButton.classList.add('hidden');
+                    copyResponseButton.classList.remove('hidden');
+                    copyResponseButton.onclick = () => { 
+                        const a = document.createElement('a'); 
+                        a.href = imageUrl; 
+                        a.download = 'image'; 
+                        a.click(); 
+                    };
+                    copyResponseButton.innerHTML = '<span class="material-icons text-sm">download</span>';
                 } else if (responseContentType.includes('audio/')) {
                     axiosConfig.responseType = 'blob';
                     const blobResponse = await axios(axiosConfig);
@@ -442,41 +451,55 @@
                             <source src="${audioUrl}" type="${responseContentType}">
                             Your browser does not support the audio element.
                         </audio>
-                        <div class="text-xs text-gray-400">
-                            <a href="${audioUrl}" download class="text-blue-400 hover:text-blue-300">Download Audio</a>
-                        </div>
                     `;
-                    copyResponseButton.classList.add('hidden');
+                    copyResponseButton.classList.remove('hidden');
+                    copyResponseButton.onclick = () => { 
+                        const a = document.createElement('a'); 
+                        a.href = audioUrl; 
+                        a.download = 'audio'; 
+                        a.click(); 
+                    };
+                    copyResponseButton.innerHTML = '<span class="material-icons text-sm">download</span>';
                 } else if (responseContentType.includes('video/')) {
                     axiosConfig.responseType = 'blob';
                     const blobResponse = await axios(axiosConfig);
                     const videoUrl = URL.createObjectURL(blobResponse.data);
                     responseContent.innerHTML = headerHtml + `
                         <div class="text-white mb-3">Video Player:</div>
-                        <video controls class="w-full max-h-64 mb-3">
+                        <video controls class="w-full max-h-64 mb-3 rounded">
                             <source src="${videoUrl}" type="${responseContentType}">
                             Your browser does not support the video element.
                         </video>
-                        <div class="text-xs text-gray-400">
-                            <a href="${videoUrl}" download class="text-blue-400 hover:text-blue-300">Download Video</a>
-                        </div>
                     `;
-                    copyResponseButton.classList.add('hidden');
+                    copyResponseButton.classList.remove('hidden');
+                    copyResponseButton.onclick = () => { 
+                        const a = document.createElement('a'); 
+                        a.href = videoUrl; 
+                        a.download = 'video'; 
+                        a.click(); 
+                    };
+                    copyResponseButton.innerHTML = '<span class="material-icons text-sm">download</span>';
                 } else if (responseContentType.includes('application/pdf')) {
                     axiosConfig.responseType = 'blob';
                     const blobResponse = await axios(axiosConfig);
                     const pdfUrl = URL.createObjectURL(blobResponse.data);
                     responseContent.innerHTML = headerHtml + `
                         <div class="text-white mb-3">PDF Document:</div>
-                        <iframe src="${pdfUrl}" class="w-full h-64 border border-gray-600 mb-3"></iframe>
-                        <div class="text-xs text-gray-400">
-                            <a href="${pdfUrl}" download class="text-blue-400 hover:text-blue-300">Download PDF</a>
-                        </div>
+                        <iframe src="${pdfUrl}" class="w-full h-64 border border-gray-600 mb-3 rounded"></iframe>
                     `;
-                    copyResponseButton.classList.add('hidden');
+                    copyResponseButton.classList.remove('hidden');
+                    copyResponseButton.onclick = () => { 
+                        const a = document.createElement('a'); 
+                        a.href = pdfUrl; 
+                        a.download = 'document.pdf'; 
+                        a.click(); 
+                    };
+                    copyResponseButton.innerHTML = '<span class="material-icons text-sm">download</span>';
                 } else {
                     responseContent.innerHTML = headerHtml + `<pre class="text-white whitespace-pre-wrap m-0">${response.data}</pre>`;
                     copyResponseButton.classList.remove('hidden');
+                    copyResponseButton.onclick = () => copyToClipboard('response-content-${endpointIndex}');
+                    copyResponseButton.innerHTML = '<span class="material-icons text-sm">content_copy</span>';
                 }
             } catch (error) {
                 let errorMessage = error.message;
@@ -603,17 +626,17 @@
                                 <input 
                                     type="text" 
                                     name="${param}" 
-                                    class="w-full px-3 py-2 border border-gray-700 bg-gray-900 text-sm focus:outline-none focus:border-blue-500 text-gray-100 placeholder:text-gray-500 rounded-lg transition-all focus:shadow-sm" 
+                                    class="w-full px-3 py-2 border border-gray-700 bg-black text-sm focus:outline-none focus:border-purple-500 text-gray-100 placeholder:text-gray-500 rounded-lg transition-all focus:shadow-sm" 
                                     placeholder="" 
                                     ${paramIndex === 0 ? 'required' : ''}
                                 >
                             </div>
                         `).join('');
                     }
-                    let methodBg = 'bg-gray-900';
-                    let methodText = 'text-blue-500';
+                    let methodBg = 'bg-black';
+                    let methodText = 'text-purple-400';
                     if (method === 'GET') {
-                        methodBg = 'bg-blue-600';
+                        methodBg = 'bg-gradient-to-r from-purple-600 to-purple-400';
                         methodText = 'text-white';
                     } else if (method === 'POST') {
                         methodBg = 'bg-green-600';
@@ -626,13 +649,13 @@
                         methodText = 'text-white';
                     }
                     const div = document.createElement('div');
-                    div.classList.add('bg-gray-800', 'border', 'border-gray-700', 'api-item', 'hover:border-blue-500', 'rounded-lg', 'overflow-hidden', 'shadow-md', 'transition-all', 'hover:shadow-xl');
+                    div.classList.add('bg-black', 'border', 'border-gray-700', 'api-item', 'hover:border-purple-500', 'rounded-lg', 'overflow-hidden', 'shadow-md', 'transition-all', 'hover:shadow-xl');
                     div.dataset.method = method;
                     div.dataset.path = basePath;
                     div.dataset.alias = alias;
                     div.innerHTML = `
                         <button onclick="toggleEndpoint(${index})" class="w-full text-left">
-                            <div class="px-4 py-3.5 flex items-center justify-between gap-3 bg-gradient-to-r from-gray-900 to-gray-800">
+                            <div class="px-4 py-3.5 flex items-center justify-between gap-3 bg-black">
                                 <div class="flex items-center min-w-0 flex-1 gap-3">
                                     <span class="inline-block px-2.5 py-1 text-xs font-semibold ${methodText} flex-shrink-0 rounded ${methodBg} transition-all hover:opacity-90">
                                         ${method}
@@ -643,11 +666,12 @@
                                     <span class="material-icons transition-transform duration-200 text-gray-400" id="endpoint-icon-${index}">expand_more</span>
                                 </div>
                             </div>
-                            <div class="px-4 pb-3 bg-gray-800">
+                            <div class="px-4 border-t border-gray-700"></div>
+                            <div class="px-4 pb-3 bg-black">
                                 <span class="text-xs text-gray-500 block pt-2.5" title="${alias}">${alias}</span>
                             </div>
                         </button>
-                        <div id="endpoint-${index}" class="hidden bg-gray-800 p-4 border-t border-gray-700 rounded-b-lg">
+                        <div id="endpoint-${index}" class="hidden bg-black p-4 border-t border-gray-700 rounded-b-lg">
                             <div>
                                 <div class="text-gray-300 font-bold text-xs mb-2 flex items-center">
                                     <span class="material-icons text-sm mr-1">info</span>
@@ -665,17 +689,17 @@
                                         <div class="mb-4 space-y-2">
                                             ${formHtml}
                                         </div>
-                                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 font-semibold text-gray-100 px-6 py-2 text-xs font-medium transition-colors duration-150 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg">
+                                        <button type="submit" class="bg-gradient-to-r from-purple-600 to-purple-400 hover:opacity-90 font-semibold text-gray-100 px-6 py-2 text-xs font-medium transition-colors duration-150 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg">
                                         Execute
                                         </button>
-                                        <button type="button" id="clear-${index}" onclick="clearResponse(${index})" class="hidden bg-gray-800 border border-gray-700 hover:border-blue-500 font-semibold text-gray-100 px-6 py-2 text-xs font-medium transition-colors duration-150 ml-2 rounded-lg">
+                                        <button type="button" id="clear-${index}" onclick="clearResponse(${index})" class="hidden bg-black border border-gray-700 hover:border-purple-500 font-semibold text-gray-100 px-6 py-2 text-xs font-medium transition-colors duration-150 ml-2 rounded-lg">
                                         Clear
                                         </button>
                                     </form>
                                 </div>
                             </div>
                             <div id="response-${index}" class="hidden mt-4">
-                                <div class="text-gray-300 font-bold text-xs mb-2 flex items-center justify-between">
+                                <div class="text-gray-300 font-bold text-xs mb-3 flex items-center justify-between">
                                     <div class="flex items-center">
                                         <span class="material-icons text-sm mr-1">code</span>
                                         RESPONSE
@@ -684,12 +708,12 @@
                                         <span class="material-icons text-sm">content_copy</span>
                                     </button>
                                 </div>
-                                <div class="bg-gray-900 text-white text-xs p-4 rounded-lg">
-                                    <div class="bg-gray-900 max-h-80 overflow-auto" id="response-content-${index}"></div>
+                                <div class="bg-black border border-gray-700 text-white text-xs p-4 rounded-lg">
+                                    <div class="bg-black max-h-80 overflow-auto" id="response-content-${index}"></div>
                                 </div>
                             </div>
                             <div id="curl-${index}" class="hidden mt-4">
-                                <div class="text-gray-300 font-bold text-xs mb-2 flex items-center justify-between">
+                                <div class="text-gray-300 font-bold text-xs mb-3 flex items-center justify-between">
                                     <div class="flex items-center">
                                         <span class="material-icons text-sm mr-1">terminal</span>
                                         CURL COMMAND
@@ -698,7 +722,7 @@
                                         <span class="material-icons text-sm">content_copy</span>
                                     </button>
                                 </div>
-                                <div class="bg-gray-900 text-white text-xs p-4 rounded-lg">
+                                <div class="bg-black border border-gray-700 text-white text-xs p-4 rounded-lg">
                                     <pre class="text-white whitespace-pre-wrap overflow-auto max-h-40" id="curl-content-${index}"></pre>
                                 </div>
                             </div>
@@ -708,7 +732,7 @@
                                         <span class="material-icons text-sm mr-1">list</span>
                                         HTTP STATUS CODES
                                     </div>
-                                    <div class="bg-gray-800 border border-gray-700 rounded-lg">
+                                    <div class="bg-black border border-gray-700 rounded-lg">
                                         <div class="overflow-x-auto">
                                             <table class="w-full text-xs">
                                                 <thead class="bg-gray-700 border-b border-gray-800">
@@ -785,13 +809,13 @@
                 }
 
                 let sidebarHtml = `
-                    <a href="/" class="flex items-center px-3 py-2 text-gray-100 hover:bg-gray-800 rounded-md transition-all hover:shadow-sm ${location.pathname === '/' ? 'bg-gray-800' : ''}">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-3 text-blue-400">
+                    <a href="/" class="flex items-center px-3 py-2 text-gray-100 hover:bg-gray-700 rounded-md transition-all hover:shadow-sm ${location.pathname === '/' ? 'bg-gray-700' : ''}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-3 text-purple-400">
                             <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
                         </svg>
                         Dashboard
                     </a>
-                    <div class="border-t border-gray-800 my-2"></div>
+                    <div class="border-t border-gray-700 my-3 -mx-4"></div>
                     <p class="text-gray-400 text-sm mb-2 font-medium">Available Categories</p>
                 `;
                 for (const cat of endpoints) {
@@ -799,17 +823,20 @@
                     const slug = cat.name.toLowerCase().replace(/\s+/g, '-');
                     const active = location.pathname === `/category/${slug}`;
                     sidebarHtml += `
-                        <a href="/category/${slug}" class="flex items-center px-3 py-2 text-gray-100 hover:bg-gray-800 rounded-md transition-all hover:shadow-sm ${active ? 'bg-gray-800' : ''}">
-                            <i class="fas fa-folder mr-3 text-blue-400"></i>
-                            ${capitalizedName} (${cat.items.length})
+                        <a href="/category/${slug}" class="flex items-center justify-between px-3 py-2 text-gray-100 hover:bg-gray-700 rounded-md transition-all hover:shadow-sm ${active ? 'bg-gray-700' : ''}">
+                            <div class="flex items-center">
+                                <i class="fas fa-folder mr-3 text-purple-400"></i>
+                                ${capitalizedName}
+                            </div>
+                            <span class="text-gray-400 text-sm">(${cat.items.length})</span>
                         </a>
                     `;
                 }
                 sidebarHtml += `
-                    <div class="border-t border-gray-800 my-2"></div>
+                    <div class="border-t border-gray-700 my-3 -mx-4"></div>
                     <p class="text-gray-400 text-sm mb-2 font-medium">Links</p>
-                    <a href="${setData.telegram}" target="_blank" class="flex items-center px-3 py-2 text-gray-100 hover:bg-gray-800 rounded-md transition-all hover:shadow-sm">
-                        <i class="fab fa-telegram-plane mr-3 text-blue-400"></i>
+                    <a href="${setData.telegram}" target="_blank" class="flex items-center px-3 py-2 text-gray-100 hover:bg-gray-700 rounded-md transition-all hover:shadow-sm">
+                        <i class="fab fa-telegram-plane mr-3 text-purple-400"></i>
                         Telegram Channel
                     </a>
                 `;
