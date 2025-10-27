@@ -6,7 +6,7 @@ const meta = {
   name: "unblur",
   desc: "Remove blur / upscale an image from a remote URL using unblurimage.ai",
   method: "get",
-  category: "image",
+  category: "tools",
   guide: {
     url: "Direct URL to the image to unblur",
   },
