@@ -86,12 +86,6 @@ const chalk = require('chalk');
             let displayPath = route;
             if (mod.meta.params && Array.isArray(mod.meta.params)) {
               displayPath += '?' + mod.meta.params.map(p => `${p.name}=`).join('&');
-            } else if (mod.meta.path) {
-              const [pathPart, queryPart] = mod.meta.path.split('?');
-              if (pathPart !== `/${name}`) {
-                logger.warn(`meta.path part does not match endpoint name for ${name}: expected /${name}, got ${pathPart}`);
-              }
-              displayPath += queryPart ? `?${queryPart}` : '';
             }
 
             let bucket = endpoints.find(e => e.name === cat);
