@@ -1,4 +1,3 @@
-<!-- Modified category.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,7 +130,7 @@
     <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-black z-[60] transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto shadow-2xl border-r border-gray-700">
         <div class="py-4 px-4 flex justify-between items-center border-b border-gray-700">
             <h3 class="text-lg font-semibold text-gray-100">API Categories</h3>
-            <button onclick="closeSidebar()" class="text-gray-400 hover:text-gray-100">
+            <button onclick="closeSidebar()" class="text-gray-400 hover:text-gray-100" aria-label="Close Sidebar">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
@@ -152,22 +151,22 @@
 
     <header class="sticky top-0 z-50 bg-black border-b border-gray-700 py-4 shadow-md">
         <div class="max-w-2xl mx-auto flex justify-between items-center px-4">
-            <button onclick="toggleSidebar()" class="pl-2 transition-all hover:scale-110">
+            <button onclick="toggleSidebar()" class="pl-2 transition-all hover:scale-110" aria-label="Open Sidebar">
                 <i class="fas fa-bars text-gray-100 text-xl"></i>
             </button>
             <h1 id="headerTitle" class="text-lg font-bold text-gray-100"></h1>
-            <button onclick="toggleNotifications()" class="pr-2 relative transition-all hover:scale-110">
+            <button onclick="toggleNotifications()" class="pr-2 relative transition-all hover:scale-110" aria-label="Notifications">
                 <i class="fas fa-bell text-gray-100 text-xl"></i>
                 <span id="notifBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1 hidden"></span>
             </button>
         </div>
     </header>
 
-    <main class="max-w-2xl mx-auto px-8 py-6">
+    <main class="max-w-2xl mx-auto px-6 py-8">
         <div class="text-left mb-3">
         </div>
 
-        <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center justify-between mb-6">
             <div class="flex-1 relative">
                 <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                     <span class="material-icons text-gray-500 text-lg">search</span>
@@ -176,19 +175,20 @@
                     type="text" 
                     id="searchInput" 
                     placeholder="Search endpoints..." 
-                    class="w-full pl-12 pr-5 py-4 text-sm border border-gray-700 bg-black text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-500 rounded-lg shadow-sm transition-all focus:shadow-md"
+                    class="w-full pl-12 pr-4 py-4 text-sm border border-gray-700 bg-black text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-500 rounded-lg shadow-sm transition-all focus:shadow-md"
+                    aria-label="Search Endpoints"
                 >
             </div>
         </div>
 
-        <div id="content" class="space-y-4">
+        <div id="content" class="space-y-6">
             <div id="noResults" class="text-center py-16" style="display: none;">
                 <div class="max-w-md mx-auto">
                     <h3 class="text-xs text-gray-500 mb-2">No result found.</h3>
                 </div>
             </div>
 
-            <div id="apiList" class="space-y-3"></div>
+            <div id="apiList" class="space-y-6"></div>
         </div>
     </main>
 
@@ -887,7 +887,7 @@
                     div.dataset.alias = alias;
                     div.innerHTML = `
                         <button onclick="toggleEndpoint(${index})" class="w-full text-left">
-                            <div class="px-4 py-3.5 flex items-center justify-between gap-3 bg-black">
+                            <div class="px-3 py-3.5 flex items-center justify-between gap-3 bg-black">
                                 <div class="flex items-center min-w-0 flex-1 gap-3">
                                     <span class="inline-block px-2.5 py-1 text-xs font-semibold text-white flex-shrink-0 rounded bg-gradient-to-r from-purple-600 to-purple-400 transition-all hover:opacity-90">
                                         ${methodStr}
@@ -898,12 +898,12 @@
                                     <span class="material-icons transition-transform duration-200 text-gray-400" id="endpoint-icon-${index}">expand_more</span>
                                 </div>
                             </div>
-                            <div class="px-4 border-t border-gray-700"></div>
-                            <div class="px-4 pb-3 bg-black">
+                            <div class="px-3 border-t border-gray-700"></div>
+                            <div class="px-3 pb-3 bg-black">
                                 <span class="text-xs text-gray-500 block pt-2.5" title="${alias}">${alias}</span>
                             </div>
                         </button>
-                        <div id="endpoint-${index}" class="hidden bg-black p-4 border-t border-gray-700 rounded-b-lg">
+                        <div id="endpoint-${index}" class="hidden bg-black p-3 border-t border-gray-700 rounded-b-lg">
                             <div>
                                 <div class="text-gray-300 font-bold text-xs mb-2 flex items-center">
                                     <span class="material-icons text-sm mr-1">info</span>
