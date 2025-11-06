@@ -3,7 +3,7 @@ const { WelCard } = require("@delirius/welcard");
 const fs = require("fs");
 
 const meta = {
-  name: 'Welcome Card',
+  name: 'Welcard',
   desc: 'Generate a customizable welcome card image and return the PNG image binary',
   method: ['get', 'post'],
   category: 'canvas',
