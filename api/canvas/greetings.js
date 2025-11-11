@@ -159,7 +159,7 @@ class Greeting {
 }
 
 const meta = {
-  name: 'greeting',
+  name: 'greetings',
   desc: 'Generate a welcome or goodbye image',
   method: ['get', 'post'],
   category: 'canvas',
