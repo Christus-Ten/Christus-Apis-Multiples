@@ -1,3 +1,4 @@
+<!-- docs/category.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -143,7 +144,7 @@
     <div id="notificationPanel" class="hidden fixed top-12 right-4 bg-black border border-gray-700 p-4 z-[60] shadow-xl rounded-lg w-80 max-h-96 overflow-y-auto transition-all">
         <div class="flex justify-between items-center mb-3">
             <h4 class="text-sm font-bold text-gray-100">Notifications</h4>
-            <button id="clearNotifications" class="text-purple-400 text-xs hover:text-purple-300">Clear All</button>
+            <button id="clearNotifications" class="text-purple-400 text-xs hover:text-purple-300">Mark all as read</button>
         </div>
         <div id="notifContent" class="space-y-3"></div>
     </div>
@@ -200,6 +201,8 @@
         const notifContent = document.getElementById('notifContent');
         const clearNotificationsBtn = document.getElementById('clearNotifications');
         const notifBadge = document.getElementById('notifBadge');
+        let notifs = [];
+        let readIds = JSON.parse(localStorage.getItem('readNotifications') || '[]');
         function toggleSidebar() {
             if (window.matchMedia('(min-width: 1024px)').matches) return;
             if (sidebar.classList.contains('-translate-x-full')) {
@@ -224,6 +227,31 @@
                 notificationPanel.classList.add('hidden');
             }
         }
+        function markAsRead(id) {
+            if (!readIds.includes(id)) {
+                readIds.push(id);
+                localStorage.setItem('readNotifications', JSON.stringify(readIds));
+                updateNotifPanel();
+            }
+        }
+        function updateNotifPanel() {
+            const unread = notifs.filter(n => !readIds.includes(n.id));
+            let notifHtml = '';
+            if (unread.length > 0) {
+                notifHtml = unread.map(n => `
+                    <div onclick="markAsRead(${n.id})" class="border-b border-gray-700 py-2 last:border-0 cursor-pointer">
+                        <h5 class="text-xs font-bold text-gray-100">${n.title}</h5>
+                        <p class="text-xs text-gray-400">${n.message}</p>
+                    </div>
+                `).join('');
+                notifBadge.textContent = unread.length;
+                notifBadge.classList.remove('hidden');
+            } else {
+                notifHtml = '<p class="text-xs text-gray-400">No notifications yet.</p>';
+                notifBadge.classList.add('hidden');
+            }
+            notifContent.innerHTML = notifHtml;
+        }
         document.addEventListener('click', (event) => {
             if (!event.target.closest('header') && !event.target.closest('#sidebar') && !event.target.closest('#notificationPanel')) {
                 closeSidebar();
@@ -244,9 +272,12 @@
             });
         });
         clearNotificationsBtn.addEventListener('click', () => {
-            localStorage.setItem('notificationsCleared', 'true');
-            notifContent.innerHTML = '<p class="text-xs text-gray-400">No notifications yet.</p>';
-            notifBadge.classList.add('hidden');
+            const newIds = notifs.map(n => n.id).filter(id => !readIds.includes(id));
+            if (newIds.length > 0) {
+                readIds = [...readIds, ...newIds];
+                localStorage.setItem('readNotifications', JSON.stringify(readIds));
+                updateNotifPanel();
+            }
         });
         let searchInput, noResults, apiList;
         function toggleEndpoint(endpointIndex) {
@@ -711,23 +742,8 @@
                 document.querySelector('meta[property="og:description"]').content = setData.description;
                 document.querySelector('link[rel="icon"]').href = setData.icon;
                 document.getElementById('footerCopyright').textContent = `© ${setData.name}. | All Rights Reserved.`;
-                // Notifications
-                const cleared = localStorage.getItem('notificationsCleared') === 'true';
-                const notifications = cleared ? [] : (setData.notification || []);
-                let notifHtml = '';
-                if (notifications.length > 0) {
-                    notifHtml = notifications.map(n => `
-                        <div class="border-b border-gray-700 py-2 last:border-0">
-                            <h5 class="text-xs font-bold text-gray-100">${n.title}</h5>
-                            <p class="text-xs text-gray-400">${n.message}</p>
-                        </div>
-                    `).join('');
-                    notifBadge.textContent = notifications.length;
-                    notifBadge.classList.remove('hidden');
-                } else {
-                    notifHtml = '<p class="text-xs text-gray-400">No notifications yet.</p>';
-                }
-                notifContent.innerHTML = notifHtml;
+                notifs = setData.notification || [];
+                updateNotifPanel();
                 const catPath = location.pathname.replace('/category/', '').toLowerCase();
                 const res = await fetch('/endpoints');
                 const { endpoints } = await res.json();
@@ -1028,6 +1044,17 @@
                     </a>
                 `;
                 sidebarContent.innerHTML = sidebarHtml;
+                // Start polling for notifications
+                setInterval(async () => {
+                    try {
+                        const res = await fetch('/notifications');
+                        const data = await res.json();
+                        notifs = data.notifications || [];
+                        updateNotifPanel();
+                    } catch (err) {
+                        console.error('Failed to fetch notifications:', err);
+                    }
+                }, 5000);
             } finally {
                 loader.classList.add('hidden');
             }
