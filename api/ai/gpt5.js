@@ -5,7 +5,7 @@ const meta = {
   name: 'GPT5',
   desc: 'Send a prompt to UniAPIs GPT-5 AI and get a response',
   method: ['get', 'post'],
-  category: 'ai',
+  category: 'AI',
   params: [
     {
       name: 'prompt',
