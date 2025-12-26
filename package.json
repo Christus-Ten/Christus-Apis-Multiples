@@ -1,5 +1,5 @@
 {
-  "name": "Chaldea-API",
+  "name": "Christus-API",
   "version": "1.0.0",
   "description": "Open-source user interface for GET and POST endpoints backend.",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "author": "AjiroDesu",
+  "author": "Christus",
   "license": "MIT",
   "dependencies": {
     "@delirius/welcard": "^1.0.39",
