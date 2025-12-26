@@ -1,8 +1,8 @@
 module.exports = {
-  name: "Shin APIs",
+  name: "Christus APIs",
   description:
     "Simple and easy to use",
-  key: "ajiro2005",
+  key: "Christus-Ten",
   header: {
     status: "Online!",
     imageSrc: [
@@ -15,7 +15,7 @@ module.exports = {
     },
   },
   icon: "/docs/image/icon.png",
-  operator: "AjiroDesu",
+  operator: "Christus",
   telegram: "https://t.me/+AQO22J2q6KBlNWM1",
   messenger: "https://m.me/j/Aba0mwuz9PTv7bP9/",
   github: "https://github.com/ajirodesu"
