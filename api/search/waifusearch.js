@@ -5,7 +5,7 @@ const meta = {
   name: 'waifusearch',
   desc: 'Search waifu images by tag and optional filters from waifu.im API',
   method: ['get', 'post'],
-  category: 'API',
+  category: 'search',
   params: [
     {
       name: 'tag',
