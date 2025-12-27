@@ -1,5 +1,5 @@
 module.exports = {
-  name: "Christus APIs",
+  name: "Christus Multiples APIs",
   description:
     "Simple and easy to use",
   key: "Christus-Ten",
