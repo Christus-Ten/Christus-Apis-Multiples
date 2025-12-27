@@ -8,7 +8,7 @@ const meta = {
   name: 'pornhub',
   desc: 'Create "Pornhub style" logo image using ephoto360 (returns PNG image)',
   method: ['get', 'post'],
-  category: 'image',
+  category: 'Image',
   params: [
     {
       name: 'text1',
