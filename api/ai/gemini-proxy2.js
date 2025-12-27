@@ -2,8 +2,8 @@
 const axios = require('axios');
 
 const meta = {
-  name: 'gemini-Proxy2',
-  desc: 'Send a prompt to Gemini-2 AI via UniAPIs and get a response',
+  name: 'gemini-proxy',
+  desc: 'Send a prompt to UniAPIs Gemini Proxy 2 AI and get a response',
   method: ['get', 'post'],
   category: 'AI',
   params: [
@@ -33,15 +33,20 @@ async function onStart({ req, res }) {
     });
 
     if (!data.status) {
-      return res.status(500).json({ status: false, error: 'API returned an error' });
+      return res.status(500).json({
+        status: false,
+        error: 'API returned an error'
+      });
     }
 
-    // Retour formaté simple + option raw
+    // Extraire le texte principal du premier candidat
+    const resultText = data.raw?.candidates?.[0]?.content?.parts?.[0]?.text || data.result;
+
     res.json({
       status: true,
-      operator: data.operator,
+      operator: 'Christus', // Forcé ici
       model: data.model,
-      result: data.result,
+      result: resultText,
       raw: data.raw
     });
 
