@@ -6,7 +6,8 @@ module.exports = {
   header: {
     status: "Online!",
     imageSrc: [
-      "https://i.ibb.co/0yNkHFHK/image0.gif",
+      "https://i.ibb.co/CKx2kpY5/image0.gif",
+      "https://i.ibb.co/fV52xH0P/image0.gif",
     ],
     imageSize: {
       mobile: "80%",
