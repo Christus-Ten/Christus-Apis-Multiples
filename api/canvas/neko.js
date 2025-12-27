@@ -5,7 +5,7 @@ const meta = {
   name: 'neko',
   desc: 'Get random neko images from nekos.best API',
   method: ['get', 'post'],
-  category: 'search',
+  category: 'Search',
   params: []
 };
 
