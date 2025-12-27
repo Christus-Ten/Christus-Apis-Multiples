@@ -5,7 +5,7 @@ const meta = {
   name: 'Spotify',
   desc: 'Search for tracks on Spotify via ZetBot API',
   method: ['get'],
-  category: 'Downloader',
+  category: 'downloader',
   params: [
     {
       name: 'search',
