@@ -1,15 +1,15 @@
-// lennaAI.js
+// lenna.js
 const axios = require('axios');
 
 const meta = {
-  name: 'lennaAI',
-  desc: 'Send a prompt to Lenna AI via UniAPIs and get a response',
+  name: 'LennaAI',
+  desc: 'Send a prompt to UniAPIs Lenna (Leva AI) and get a response',
   method: ['get', 'post'],
   category: 'AI',
   params: [
     {
       name: 'prompt',
-      desc: 'Message to send to the AI',
+      desc: 'Message to send to Lenna AI',
       example: 'Hello',
       required: true
     }
@@ -28,17 +28,21 @@ async function onStart({ req, res }) {
       });
     }
 
-    const { data } = await axios.get('https://uniapis.onrender.com/api/lenna', {
-      params: { prompt }
-    });
+    const { data } = await axios.get(
+      'https://uniapis.onrender.com/api/lenna',
+      { params: { prompt } }
+    );
 
     if (!data.status) {
-      return res.status(500).json({ status: false, error: 'API returned an error' });
+      return res.status(500).json({
+        status: false,
+        error: 'API returned an error'
+      });
     }
 
     res.json({
       status: true,
-      operator: data.operator,
+      operator: 'Christus', // 🔥 TOUJOURS FORCÉ
       result: data.result
     });
 
