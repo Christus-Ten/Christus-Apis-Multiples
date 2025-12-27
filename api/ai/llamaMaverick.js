@@ -1,9 +1,9 @@
-// llamaMaverick.js
+// llama4Maverick.js
 const axios = require('axios');
 
 const meta = {
   name: 'llama-Maverick',
-  desc: 'Send a prompt to LLaMA-4 Maverick AI via UniAPIs and get a response',
+  desc: 'Send a prompt to UniAPIs LLaMA-4 Maverick 17B Instruct and get a response',
   method: ['get', 'post'],
   category: 'AI',
   params: [
@@ -21,7 +21,7 @@ const meta = {
     },
     {
       name: 'url',
-      desc: 'Optional URL for context',
+      desc: 'Optional context URL',
       example: 'https://example.com',
       required: false
     }
@@ -31,6 +31,7 @@ const meta = {
 async function onStart({ req, res }) {
   try {
     const body = req.method === 'POST' ? req.body : req.query;
+
     const prompt = body.prompt;
     const uid = body.uid;
     const url = body.url || '';
@@ -42,17 +43,21 @@ async function onStart({ req, res }) {
       });
     }
 
-    const { data } = await axios.get('https://uniapis.onrender.com/api/llama-4-maverick-17b-128e-instruct', {
-      params: { prompt, uid, url }
-    });
+    const { data } = await axios.get(
+      'https://uniapis.onrender.com/api/llama-4-maverick-17b-128e-instruct',
+      { params: { prompt, uid, url } }
+    );
 
     if (!data.status) {
-      return res.status(500).json({ status: false, error: 'API returned an error' });
+      return res.status(500).json({
+        status: false,
+        error: 'API returned an error'
+      });
     }
 
     res.json({
       status: true,
-      operator: data.operator,
+      operator: 'Christus', // 🔥 FORCÉ
       reply: data.reply,
       uid: data.uid
     });
