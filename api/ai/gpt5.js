@@ -1,4 +1,4 @@
-// uniGPT.js
+// gpt5.js
 const axios = require('axios');
 
 const meta = {
@@ -31,9 +31,10 @@ const meta = {
 async function onStart({ req, res }) {
   try {
     const body = req.method === 'POST' ? req.body : req.query;
+
     const prompt = body.prompt;
     const uid = body.uid;
-    const reset = body.reset || false;
+    const reset = body.reset ?? false;
 
     if (!prompt || !uid) {
       return res.status(400).json({
@@ -42,17 +43,21 @@ async function onStart({ req, res }) {
       });
     }
 
-    const { data } = await axios.get('https://uniapis.onrender.com/api/gpt5', {
-      params: { prompt, uid, reset }
-    });
+    const { data } = await axios.get(
+      'https://uniapis.onrender.com/api/gpt5',
+      { params: { prompt, uid, reset } }
+    );
 
     if (!data.status) {
-      return res.status(500).json({ status: false, error: 'API returned an error' });
+      return res.status(500).json({
+        status: false,
+        error: 'API returned an error'
+      });
     }
 
     res.json({
       status: true,
-      operator: data.operator,
+      operator: 'Christus', // 🔥 FORCÉ
       result: data.result,
       conversationId: data.conversationId,
       conversationLength: data.conversationLength
