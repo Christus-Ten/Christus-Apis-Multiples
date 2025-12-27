@@ -6,7 +6,7 @@ module.exports = {
   header: {
     status: "Online!",
     imageSrc: [
-      "https://cdnb.artstation.com/p/assets/images/images/066/149/065/original/killer-rabbit-media-chinese-alleyway-export.gif?1692171513",
+      "https://i.ibb.co/0yNkHFHK/image0.gif",
     ],
     imageSize: {
       mobile: "80%",
