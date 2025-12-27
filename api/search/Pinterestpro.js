@@ -41,7 +41,7 @@ async function onStart({ req, res }) {
 
     res.json({
       status: true,
-      operator: 'Aryan Chauhan',
+      operator: 'Christus',
       count: data.count,
       query: data.query,
       results: data.results
